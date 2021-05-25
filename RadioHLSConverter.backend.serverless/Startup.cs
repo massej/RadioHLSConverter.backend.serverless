@@ -135,12 +135,12 @@ namespace RadioHLSConverter.backend.serverless
             ////////////////////////////////////////
             if (env.IsDevelopment())
             {
-                logger.LogInformation("In development environment!");
+                logger.LogInformation(Resources.Resource.startup_development_environment);
                 app.UseDeveloperExceptionPage();
             }
             else
             {
-                logger.LogInformation("In production environment!");
+                logger.LogInformation(Resources.Resource.startup_production_environment);
                 app.UseHsts();
             }
 

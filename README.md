@@ -1,2 +1,33 @@
 # RadioHLSConverter.backend.serverless
-RadioHLSConverter.backend.serverless
+
+This software will allow you to convert an HLS radio source to the old format.
+Ex : MPEG-TS to ADTS while keeping the same audio codec from the HLS radio.
+
+1. Install C# NET Core 5.0
+https://dotnet.microsoft.com/download/dotnet/5.0
+
+2. Download the last binary version from
+https://github.com/massej/RadioHLSConverter.backend.serverless/tree/main/release-binaries/
+
+3. appsettings.json configuration
+Set the HLS radio source URL and other configurations / infos.
+
+You should set the 
+HTTPContentType to "audio/aac"
+"FFMPEGConverterAudioCodec" to "copy"
+"FFMPEGForceFormat" to "adts"
+
+Note :
+You should use "copy" to keep the same aac format as the streaming source or a "pcm_s16le" a PCM format.
+
+You must avoid converting HLS segment to mp3 or aac output due to DCT-based audio codecs like MP3, AAC rely on neighbouring audio frames for decoding. At the start of the stream, there's a priming frame which serves that purpose. It has a negative timestamp, so during concat, its TS clashes with the final packets of the preceding file and it gets dropped by concat. PCM is self-contained for decoding, so doesn't suffer from this.
+
+4. Run project 
+
+Windows : RadioHLSConverter.backend.serverless.exe --urls="http://127.0.0.1:5000"
+Linux : /bin/dotnet RadioHLSConverter.backend.serverless.dll --urls="http://127.0.0.1:5000"
+
+5. Add audio source URL into your music software (i.e. Winamp)
+Add this URL into your music software http://127.0.0.1:5000
+
+6. Enjoy listening music to HLS radio stream

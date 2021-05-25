@@ -15,7 +15,6 @@ using Microsoft.Extensions.Options;
 using RadioHLSConverter.backend.serverless.Services;
 using System;
 using Microsoft.Extensions.Logging;
-using System.Net;
 
 
 namespace RadioHLSConverter.backend.serverless.Radio
@@ -69,7 +68,7 @@ namespace RadioHLSConverter.backend.serverless.Radio
 
             // Logs incoming connection.
             string remoteIpAddress = Request?.HttpContext?.Connection?.RemoteIpAddress?.ToString();
-            _logger.LogInformation("Connected client, GetRadio - IP : " + remoteIpAddress + " - Radio ID : " + radioId + " - Radio Name : " + _appSettings.Radios[radioId].RadioName);
+            _logger.LogInformation(String.Format(Resources.Resource.radio_connected_client, remoteIpAddress, radioId, _appSettings.Radios[radioId].RadioName));
 
 
             /////////////////////////////////
@@ -91,11 +90,11 @@ namespace RadioHLSConverter.backend.serverless.Radio
             }
             catch (TaskCanceledException)
             {
-                _logger.LogInformation("Disconnected client - TaskCanceledException, GetRadio - IP : " + remoteIpAddress + " - Radio ID : " + radioId + " - Radio Name : " + _appSettings.Radios[radioId].RadioName);
+                _logger.LogInformation(String.Format(Resources.Resource.radio_disconnected_client, "TaskCanceledException", remoteIpAddress, radioId, _appSettings.Radios[radioId].RadioName));
             }
             catch (OperationCanceledException)
             {
-                _logger.LogInformation("Disconnected client - OperationCanceledException, GetRadio - IP : " + remoteIpAddress + " - Radio ID : " + radioId + " - Radio Name : " + _appSettings.Radios[radioId].RadioName);
+                _logger.LogInformation(String.Format(Resources.Resource.radio_disconnected_client, "OperationCanceledException", remoteIpAddress, radioId, _appSettings.Radios[radioId].RadioName));
             }
 
             // On debug and running as unit test stop there.
