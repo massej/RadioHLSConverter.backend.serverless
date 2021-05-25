@@ -1,0 +1,10 @@
+﻿{
+  "path": "/api/Radio/0",
+  "httpMethod": "GET",
+  "headers": {
+    "Accept": "application/json",
+    "Accept-Language": "en",
+    "Content-Type": "application/json"
+  },
+  "body": ""
+}
