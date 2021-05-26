@@ -64,6 +64,8 @@ namespace RadioHLSConverter.backend.serverless.Services
             _ffMpegConverterService = ffMpegConverterService;
         }
 
+
+        #region Load M3U8 file
         /// <summary>
         /// Load the M3U8 file from an url.
         /// Once the download is completed it will automatically load the M3U8 file.
@@ -102,16 +104,19 @@ namespace RadioHLSConverter.backend.serverless.Services
         }
 
         /// <summary>
-        /// Download an m3u8 segment and return the segment data.
+        /// Load the M3U8 stream file from an url.
+        /// Once the download is completed it will automatically load the M3U8 file.
         /// </summary>
-        /// <param name="segment"></param>
+        /// <param name="stream"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task DownloadStream(M3U8Stream stream, CancellationToken cancellationToken)
+        public async Task LoadStreamFile(M3U8Stream stream, CancellationToken cancellationToken)
         {
             await LoadM3U8File(URLPath + stream.StreamFilename, cancellationToken);
         }
+        #endregion
 
+        #region Download segment
         /// <summary>
         /// Download an m3u8 segment and return the segment data.
         /// </summary>
@@ -141,8 +146,9 @@ namespace RadioHLSConverter.backend.serverless.Services
                 return await _ffMpegConverterService.ConvertSegmentStream(radioId, segmentStream);
             }
         }
+        #endregion
 
-
+        #region Segment position
         /// <summary>
         /// Return the first segment to be read based on the required buffer size in the appsettings.json
         /// </summary>
@@ -197,6 +203,7 @@ namespace RadioHLSConverter.backend.serverless.Services
         {
             return Segments.SkipWhile(x => x.SegmentFilename != segment.SegmentFilename).Skip(1).FirstOrDefault();
         }
+        #endregion
 
         /// <summary>
         /// Process the data that has been downloaded into Data property.
@@ -218,7 +225,7 @@ namespace RadioHLSConverter.backend.serverless.Services
 
             // If we have a list of streams and no segments, we need to select and download the best streaming available.
             if (Streams.Any() && !Segments.Any())
-                await DownloadStream(GetHighestQualityStream(), cancellationToken);
+                await LoadStreamFile(GetHighestQualityStream(), cancellationToken);
             
             // If there is no segment. (Process has failed!)
             if (!Segments.Any())

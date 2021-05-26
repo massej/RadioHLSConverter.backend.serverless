@@ -9,7 +9,6 @@
 // Includes.
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using RadioHLSConverter.backend.serverless.Model.M3U8;
 
@@ -36,6 +35,7 @@ namespace RadioHLSConverter.backend.serverless.Services
         /// </summary>
         public IEnumerable<M3U8Segment> Segments { get; }
 
+        #region Load M3U8 file
         /// <summary>
         /// Load the M3U8 file from an url.
         /// Once the download is completed it will automatically load the M3U8 file.
@@ -46,14 +46,16 @@ namespace RadioHLSConverter.backend.serverless.Services
         public Task LoadM3U8File(string url, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Download the M3U8 file from an url.
+        /// Load the M3U8 stream file from an url.
         /// Once the download is completed it will automatically load the M3U8 file.
         /// </summary>
-        /// <param name="segment"></param>
+        /// <param name="stream"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task DownloadStream(M3U8Stream stream, CancellationToken cancellationToken);
+        public Task LoadStreamFile(M3U8Stream stream, CancellationToken cancellationToken);
+        #endregion
 
+        #region Download segment
         /// <summary>
         /// Download an m3u8 segment and return the segment data.
         /// </summary>
@@ -70,7 +72,9 @@ namespace RadioHLSConverter.backend.serverless.Services
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public Task<byte[]> DownloadConvertedSegment(int radioId, M3U8Segment segment, CancellationToken cancellationToken);
+        #endregion
 
+        #region Segment position
         /// <summary>
         /// Return the first segment to be read based on the required buffer size in the appsettings.json
         /// </summary>
@@ -94,6 +98,7 @@ namespace RadioHLSConverter.backend.serverless.Services
         /// <param name="segment"></param>
         /// <returns></returns>
         public M3U8Segment GetNextSegment(M3U8Segment segment);
+        #endregion
 
         /// <summary>
         /// Return the highest quality streaming available if any.
