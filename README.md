@@ -1,7 +1,7 @@
 # RadioHLSConverter.backend.serverless
 
 This software will allow you to convert an HLS radio source (m3u8 file extension) to the old format.
-- Ex : Convert MPEG-TS to ADTS audio format while keeping the same audio codec (aac) from the HLS radio to allow Winamp to play/read the stream.
+- Ex : Convert MPEG-TS to ADTS audio format while keeping the same audio codec (aac) from the HLS radio to allow Winamp to play / read the stream.
 
 1. Install C# NET Core 5.0 https://dotnet.microsoft.com/download/dotnet/5.0
 
