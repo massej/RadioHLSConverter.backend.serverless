@@ -29,7 +29,7 @@ Note :
 
  *** You can also install this software as a service (to run in background)
 
-- Windows : sc create RadioHLSConverter BinPath=[PATH]\RadioHLSConverter.backend.serverless.exe
+- Windows : sc create RadioHLSConverter BinPath="[YOUR PATH]\RadioHLSConverter.backend.serverless.exe --urls=\"http:/127.0.0.1:5000\""
 - Linux : This application support systemd.
 
 5. Add audio source URL into your music software (i.e. Winamp)

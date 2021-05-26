@@ -7,6 +7,7 @@
 
 
 // Includes.
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Builder;
@@ -135,12 +136,12 @@ namespace RadioHLSConverter.backend.serverless
             ////////////////////////////////////////
             if (env.IsDevelopment())
             {
-                logger.LogInformation(Resources.Resource.startup_development_environment);
+                logger.LogInformation(string.Format(Resources.Resource.startup_development_environment, GetType().Assembly.GetName().Version));
                 app.UseDeveloperExceptionPage();
             }
             else
             {
-                logger.LogInformation(Resources.Resource.startup_production_environment);
+                logger.LogInformation(string.Format(Resources.Resource.startup_production_environment, GetType().Assembly.GetName().Version));
                 app.UseHsts();
             }
 

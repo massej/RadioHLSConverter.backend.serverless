@@ -23,6 +23,7 @@ namespace RadioHLSConverter.backend.serverless
     {
         public static void Main(string[] args)
         {
+            System.IO.Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             CreateHostBuilder(args).Build().Run();
         }
 

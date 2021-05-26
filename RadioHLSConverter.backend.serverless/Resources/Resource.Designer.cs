@@ -133,7 +133,7 @@ namespace RadioHLSConverter.backend.serverless.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In development environment!.
+        ///   Looks up a localized string similar to In development environment - version {0}!.
         /// </summary>
         public static string startup_development_environment {
             get {
@@ -142,7 +142,7 @@ namespace RadioHLSConverter.backend.serverless.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In production environment!.
+        ///   Looks up a localized string similar to In production environment - version {0}!.
         /// </summary>
         public static string startup_production_environment {
             get {

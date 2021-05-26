@@ -142,9 +142,9 @@
     <value>Disconnected client - {0}, GetRadio - IP : {1} - Radio ID : {2} - Radio Name : {3}</value>
   </data>
   <data name="startup_development_environment" xml:space="preserve">
-    <value>In development environment!</value>
+    <value>In development environment - version {0}!</value>
   </data>
   <data name="startup_production_environment" xml:space="preserve">
-    <value>In production environment!</value>
+    <value>In production environment - version {0}!</value>
   </data>
 </root>
