@@ -5,6 +5,8 @@ This software will allow you to convert an HLS radio source (m3u8 file extension
 
 1. Install C# NET Core 5.0 https://dotnet.microsoft.com/download/dotnet/5.0
 
+	- On Linux you may need to install ffmpeg manually using yum or apt-get.
+	
 2. Download the last binary version from https://github.com/massej/RadioHLSConverter.backend.serverless/tree/main/release-binaries/
 
 3. appsettings.json configuration
