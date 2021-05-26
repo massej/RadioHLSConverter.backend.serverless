@@ -79,6 +79,15 @@ namespace RadioHLSConverter.backend.serverless.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error, missing &quot;ffmpeg.exe&quot;, please check if &quot;ffmpeg.exe&quot; is inside &quot;ffmpeg-binaries&quot; folder!.
+        /// </summary>
+        public static string error_missing_ffmpeg {
+            get {
+                return ResourceManager.GetString("error_missing_ffmpeg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error, cannot load first segment, please check buffer length configuration!.
         /// </summary>
         public static string error_no_first_segment_check_buffer {
