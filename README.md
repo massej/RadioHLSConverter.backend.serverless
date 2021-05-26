@@ -27,6 +27,11 @@ Note :
  - Windows : RadioHLSConverter.backend.serverless.exe --urls="http://127.0.0.1:5000"
  - Linux : /bin/dotnet RadioHLSConverter.backend.serverless.dll --urls="http://127.0.0.1:5000"
 
+ *** You can also install this software as a service (to run in background)
+
+- Windows : sc create RadioHLSConverter BinPath=[PATH]\RadioHLSConverter.backend.serverless.exe
+- Linux : This application support systemd.
+
 5. Add audio source URL into your music software (i.e. Winamp)
  - Add this URL into your music software http://127.0.0.1:5000/api/Radio/
  - If you have multiple HLS radio station then you must use http://127.0.0.1:5000/api/Radio/[id] where you need to replace [id] by your station position in your appsettings.json section AppSettings -> Radios

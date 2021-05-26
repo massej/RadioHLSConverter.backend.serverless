@@ -31,6 +31,7 @@ namespace RadioHLSConverter.backend.serverless
                 {
                     logging.AddFile("logs/console-{Date}.log"); // <== Exception
                 })
+                .UseWindowsService()
                 .UseSystemd()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
