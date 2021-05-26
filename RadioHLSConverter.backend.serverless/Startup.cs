@@ -7,7 +7,6 @@
 
 
 // Includes.
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Builder;
@@ -143,13 +142,6 @@ namespace RadioHLSConverter.backend.serverless
             {
                 logger.LogInformation(Resources.Resource.startup_production_environment);
                 app.UseHsts();
-            }
-
-            // If ffmpeg.exe file is missing.
-            if (!System.IO.File.Exists(GlobalFFOptions.Current.BinaryFolder + "ffmpeg"))
-            {
-                logger.LogInformation(Resources.Resource.error_missing_ffmpeg);
-                Environment.Exit(1);
             }
 
 

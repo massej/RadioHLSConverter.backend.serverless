@@ -79,7 +79,7 @@ namespace RadioHLSConverter.backend.serverless.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error, missing &quot;ffmpeg.exe&quot;, please check if &quot;ffmpeg.exe&quot; is inside &quot;ffmpeg-binaries&quot; folder!.
+        ///   Looks up a localized string similar to Error, missing &quot;ffmpeg&quot;, please check if &quot;ffmpeg&quot; is installed or inside &quot;ffmpeg-binaries&quot; folder!.
         /// </summary>
         public static string error_missing_ffmpeg {
             get {

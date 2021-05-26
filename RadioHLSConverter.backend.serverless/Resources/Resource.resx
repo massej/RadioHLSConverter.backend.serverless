@@ -124,7 +124,7 @@
     <value>Error, invalid m3u8 format!</value>
   </data>
   <data name="error_missing_ffmpeg" xml:space="preserve">
-    <value>Error, missing "ffmpeg.exe", please check if "ffmpeg.exe" is inside "ffmpeg-binaries" folder!</value>
+    <value>Error, missing "ffmpeg", please check if "ffmpeg" is installed or inside "ffmpeg-binaries" folder!</value>
   </data>
   <data name="error_no_first_segment_check_buffer" xml:space="preserve">
     <value>Error, cannot load first segment, please check buffer length configuration!</value>
