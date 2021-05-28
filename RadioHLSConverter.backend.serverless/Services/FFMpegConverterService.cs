@@ -16,6 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FFMpegCore;
 using Microsoft.Extensions.Logging;
+using RadioHLSConverter.backend.serverless.Helpers;
 
 
 namespace RadioHLSConverter.backend.serverless.Services
@@ -92,9 +93,9 @@ namespace RadioHLSConverter.backend.serverless.Services
                 // _ allow to ignore the compiler await warning.
                 _ = FFMpegArguments
                     // Pipe to memory stream.
-                    .FromFileInput(@"\\.\pipe\" + _toFFMpegStreamName, false)
+                    .FromFileInput(_toFFMpegStream.GetPipeFullPath(_toFFMpegStreamName), false)
                     // Output set format / audio codec.
-                    .OutputToFile(@"\\.\pipe\" + _fromFFMpegStreamName, true, options => options
+                    .OutputToFile(_fromFFMpegStream.GetPipeFullPath(_fromFFMpegStreamName), true, options => options
                         .OverwriteExisting()
                         .ForceFormat(_appSettings.Radios[radioId].FFMPEGForceFormat)
                         .WithAudioCodec(_appSettings.Radios[radioId].FFMPEGConverterAudioCodec)

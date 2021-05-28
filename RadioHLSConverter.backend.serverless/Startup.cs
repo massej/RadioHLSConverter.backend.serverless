@@ -7,6 +7,7 @@
 
 
 // Includes.
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Builder;
@@ -95,7 +96,7 @@ namespace RadioHLSConverter.backend.serverless
             services.AddScoped<IHLSRadioConverterService, HLSRadioConverterService>();
             services.AddScoped<IM3U8FileService, M3U8FileService>();
 
-            GlobalFFOptions.Configure(options => options.BinaryFolder = "./ffmpeg-binaries/");
+            GlobalFFOptions.Configure(options => options.BinaryFolder = AppDomain.CurrentDomain.BaseDirectory+ "ffmpeg-binaries");
 #if DEBUG
             ////////////////////////////////////////
             // Register the Swagger generator, defining one or more Swagger documents. (API docs generator)
