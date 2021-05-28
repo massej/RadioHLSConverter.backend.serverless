@@ -2,6 +2,7 @@
  * PipeStreamHelper.cs
  * This pipe stream helper will return the pipe stream path name based on the current OS.
  * Date : 2021-05-28.
+ * By : Jonathan Massé
  */
 
 
