@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using RadioHLSConverter.backend.serverless.Settings;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using RadioHLSConverter.backend.serverless.Helpers;
 
 
@@ -20,18 +21,36 @@ namespace RadioHLSConverter.backend.serverless.Services
 {
     public class HLSRadioConverterService : IHLSRadioConverterService
     {
-        // Properties.
-        private readonly AppSettings _appSettings;
-        private readonly IM3U8FileService _m3u8FileService;
+        // Application variables.
+        private readonly AppSettings _appSettings; // Application configuration.
+        private readonly ILogger _logger; // Application logs.
+        private readonly IHttpContextAccessor _httpContextAccessor; // HTTP context accessor.
+
+        // m3u8 file service & ffmpeg converter.
+        private readonly IM3U8FileService _m3u8FileService; // Read m3u8 file and segment from HTTP.
+        private readonly IFFMpegConverterService _ffMpegConverterService; // Allow audio conversion using FFMpeg software.
 
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public HLSRadioConverterService(IOptions<AppSettings> appSettings, IM3U8FileService m3u8FileService)
+        public HLSRadioConverterService(IOptions<AppSettings> appSettings, ILoggerFactory loggerFactory, IHttpContextAccessor httpContextAccessor, IM3U8FileService m3u8FileService, IFFMpegConverterService ffMpegConverterService)
         {
             _appSettings = appSettings.Value;
+            _logger = loggerFactory.CreateLogger(nameof(HLSRadioConverterService));
+            _httpContextAccessor = httpContextAccessor;
             _m3u8FileService = m3u8FileService;
+            _ffMpegConverterService = ffMpegConverterService;
+        }
+
+
+        ///////////////////////////////////////////////////
+        // Destructor.
+        ///////////////////////////////////////////////////
+        public void Dispose()
+        {
+            _m3u8FileService?.Dispose();
+            _ffMpegConverterService?.Dispose();
         }
 
 
@@ -43,8 +62,11 @@ namespace RadioHLSConverter.backend.serverless.Services
         /// <param name="radioId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task ConvertHLSRadio(HttpResponse httpResponse, int radioId, CancellationToken cancellationToken)
+        public async Task ConvertHLSRadio(int radioId, CancellationToken cancellationToken)
         {
+            // Initialize ffmpeg converter pipe stream.
+            _ffMpegConverterService.Init_FFMpeg(radioId, UploadSegmentDataToHTTP, cancellationToken);
+
             // Download m3u8 file. (It can be a m3u8 with a list of streams of a list of segments.)
             // It will automatically download the best quality segments list if this is a list of streams.
             await _m3u8FileService.LoadM3U8File(_appSettings.Radios[radioId].RadioSourceURL, cancellationToken);
@@ -62,10 +84,11 @@ namespace RadioHLSConverter.backend.serverless.Services
             while (true)
             {
                 // Download segment.
-                var convertedSegmentData = await _m3u8FileService.DownloadConvertedSegment(radioId, segment, cancellationToken);
+                var segmentData = await _m3u8FileService.DownloadSegment(segment, cancellationToken);
 
-                // Upload segment.
-                await UploadSegmentData(httpResponse, convertedSegmentData, cancellationToken);
+                // Upload segment to ffmpeg pipe stream.
+                // ffmpeg output pipe stream will automatically call back UploadSegmentDataToHTTP with the converted segment.
+                await _ffMpegConverterService.UploadSegmentDataToFFMpeg(segmentData, cancellationToken);
 
                 // Get next segment.
                 segment = await _m3u8FileService.GetNextSegmentAndUpdateM3U8(segment, cancellationToken);
@@ -80,17 +103,24 @@ namespace RadioHLSConverter.backend.serverless.Services
 
 
         /// <summary>
-        /// UploadSegmentData
+        /// UploadSegmentDataToHTTP
         /// Upload a segment data to the HTTP client.
         /// </summary>
         /// <param name="httpResponse"></param>
         /// <param name="segmentData"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private async Task UploadSegmentData(HttpResponse httpResponse, byte[] segmentData, CancellationToken cancellationToken)
+        private async Task UploadSegmentDataToHTTP(byte[] segmentData, int offset, int count, CancellationToken cancellationToken)
         {
-            await httpResponse.Body.WriteAsync(segmentData, 0, segmentData.Length, cancellationToken);
-            await httpResponse.Body.FlushAsync(cancellationToken);
+            try
+            {
+                await _httpContextAccessor?.HttpContext?.Response?.Body?.WriteAsync(segmentData, offset, count, cancellationToken);
+                await _httpContextAccessor?.HttpContext?.Response?.Body?.FlushAsync(cancellationToken);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogInformation(exception.Message + Environment.NewLine + exception.StackTrace);
+            }
         }
     }
 }

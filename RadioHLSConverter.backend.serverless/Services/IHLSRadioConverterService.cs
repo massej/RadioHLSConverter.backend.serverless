@@ -7,9 +7,8 @@
 
 
 // Includes.
-
+using System;
 using System.Threading;
-using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
 
@@ -18,7 +17,7 @@ namespace RadioHLSConverter.backend.serverless.Services
     /// <summary>
     /// IHLSRadioConverterService inteface.
     /// </summary>
-    public interface IHLSRadioConverterService
+    public interface IHLSRadioConverterService : IDisposable
     {
         /// <summary>
         /// ConvertHLSRadio
@@ -28,6 +27,6 @@ namespace RadioHLSConverter.backend.serverless.Services
         /// <param name="radioId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task ConvertHLSRadio(HttpResponse httpResponse, int radioId, CancellationToken cancellationToken);
+        public Task ConvertHLSRadio(int radioId, CancellationToken cancellationToken);
     }
 }

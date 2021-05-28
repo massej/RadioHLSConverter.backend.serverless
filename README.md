@@ -18,9 +18,7 @@ You should set the
  - "FFMPEGForceFormat" to "adts"
 
 Note :
- - You should use "copy" to keep the same aac format as the streaming source or a "pcm_s16le" a PCM format.
-
- - You must avoid converting HLS segment (m3u8 segment) to mp3 or aac output due to DCT-based audio codecs like MP3, AAC rely on neighbouring audio frames for decoding. At the start of the stream, there's a priming frame which serves that purpose. It has a negative timestamp, so during concat, its TS clashes with the final packets of the preceding file and it gets dropped by concat. PCM is self-contained for decoding, so doesn't suffer from this.
+ - You should use "copy" on "FFMPEGConverterAudioCodec" to keep the same audio codec as the streaming source to have the best sound quality.
 
 4. Run project 
 

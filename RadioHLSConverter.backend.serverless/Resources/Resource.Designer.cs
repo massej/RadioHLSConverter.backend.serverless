@@ -79,15 +79,6 @@ namespace RadioHLSConverter.backend.serverless.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error, missing &quot;ffmpeg&quot;, please check if &quot;ffmpeg&quot; is installed or inside &quot;ffmpeg-binaries&quot; folder!.
-        /// </summary>
-        public static string error_missing_ffmpeg {
-            get {
-                return ResourceManager.GetString("error_missing_ffmpeg", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Error, cannot load first segment, please check buffer length configuration!.
         /// </summary>
         public static string error_no_first_segment_check_buffer {
@@ -111,6 +102,24 @@ namespace RadioHLSConverter.backend.serverless.Resources {
         public static string error_radio_id_not_found {
             get {
                 return ResourceManager.GetString("error_radio_id_not_found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error, &quot;ffmpeg&quot; throw an exception, please check if &quot;ffmpeg&quot; is installed or inside &quot;ffmpeg-binaries&quot; folder and check your appsettings.json configuration!.
+        /// </summary>
+        public static string error_throw_ffmpeg {
+            get {
+                return ResourceManager.GetString("error_throw_ffmpeg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error, upload pipe to ffmpeg is not connected!.
+        /// </summary>
+        public static string error_upload_pipe_not_connected {
+            get {
+                return ResourceManager.GetString("error_upload_pipe_not_connected", resourceCulture);
             }
         }
         

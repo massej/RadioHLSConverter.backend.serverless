@@ -7,6 +7,7 @@
 
 
 // Includes.
+using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Threading;
@@ -15,7 +16,7 @@ using RadioHLSConverter.backend.serverless.Model.M3U8;
 
 namespace RadioHLSConverter.backend.serverless.Services
 {
-    public interface IM3U8FileService
+    public interface IM3U8FileService : IDisposable
     {
         // Properties.
         public bool IsM3U8 { get; } // If the last downloaded m3u8 is valid.
@@ -63,15 +64,6 @@ namespace RadioHLSConverter.backend.serverless.Services
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public Task<byte[]> DownloadSegment(M3U8Segment segment, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Download an m3u8 segment and return the segment stream.
-        /// </summary>
-        /// <param name="radioId"></param>
-        /// <param name="segment"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public Task<byte[]> DownloadConvertedSegment(int radioId, M3U8Segment segment, CancellationToken cancellationToken);
         #endregion
 
         #region Segment position

@@ -7,7 +7,6 @@
 
 
 // Includes.
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Builder;
@@ -21,6 +20,7 @@ using Microsoft.Extensions.Logging;
 using RadioHLSConverter.backend.serverless.Settings;
 using RadioHLSConverter.backend.serverless.Services;
 using FFMpegCore;
+using Microsoft.AspNetCore.Http;
 using Microsoft.OpenApi.Models;
 
 
@@ -90,6 +90,7 @@ namespace RadioHLSConverter.backend.serverless
             ////////////////////////////////////////
             // Configure DI for application services.
             ////////////////////////////////////////
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IFFMpegConverterService, FFMpegConverterService>();
             services.AddScoped<IHLSRadioConverterService, HLSRadioConverterService>();
             services.AddScoped<IM3U8FileService, M3U8FileService>();

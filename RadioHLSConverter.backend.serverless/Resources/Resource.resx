@@ -123,9 +123,6 @@
   <data name="error_invalid_m3u8_format" xml:space="preserve">
     <value>Error, invalid m3u8 format!</value>
   </data>
-  <data name="error_missing_ffmpeg" xml:space="preserve">
-    <value>Error, missing "ffmpeg", please check if "ffmpeg" is installed or inside "ffmpeg-binaries" folder!</value>
-  </data>
   <data name="error_no_first_segment_check_buffer" xml:space="preserve">
     <value>Error, cannot load first segment, please check buffer length configuration!</value>
   </data>
@@ -134,6 +131,12 @@
   </data>
   <data name="error_radio_id_not_found" xml:space="preserve">
     <value>Error, radio id not found!</value>
+  </data>
+  <data name="error_throw_ffmpeg" xml:space="preserve">
+    <value>Error, "ffmpeg" throw an exception, please check if "ffmpeg" is installed or inside "ffmpeg-binaries" folder and check your appsettings.json configuration!</value>
+  </data>
+  <data name="error_upload_pipe_not_connected" xml:space="preserve">
+    <value>Error, upload pipe to ffmpeg is not connected!</value>
   </data>
   <data name="radio_connected_client" xml:space="preserve">
     <value>Connected client, GetRadio - IP : {0} - Radio ID : {1} - Radio Name : {2}</value>

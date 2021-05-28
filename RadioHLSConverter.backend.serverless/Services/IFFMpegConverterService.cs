@@ -7,7 +7,8 @@
 
 
 // Includes.
-using System.IO;
+using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -16,25 +17,25 @@ namespace RadioHLSConverter.backend.serverless.Services
     /// <summary>
     /// IFFMpegConverterService inteface.
     /// </summary>
-    public interface IFFMpegConverterService
+    public interface IFFMpegConverterService : IDisposable
     {
         /// <summary>
-        /// ConvertSegmentData
-        /// Convert a segment from a byte[] using ffmpeg utility.
+        /// Init_FFMpeg
+        /// Initialize ffmpeg and initialize connection to pipe stream.
         /// </summary>
         /// <param name="radioId"></param>
-        /// <param name="segmentData"></param>
-        /// <returns></returns>
-        public Task<byte[]> ConvertSegmentData(int radioId, byte[] segmentData);
+        /// <param name="callbackFunction"></param>
+        /// <param name="cancellationToken"></param>
+        public void Init_FFMpeg(int radioId, Func<byte[], int, int, CancellationToken, Task> callbackFunction,  CancellationToken cancellationToken);
 
 
         /// <summary>
-        /// ConvertSegmentStream
-        /// Convert a segment from a stream using ffmpeg utility.
+        /// UploadSegmentDataToFFMpeg
+        /// Upload & convert a segment from a byte[] using ffmpeg utility.
         /// </summary>
-        /// <param name="radioId"></param>
-        /// <param name="segmentStream"></param>
+        /// <param name="segmentData"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task<byte[]> ConvertSegmentStream(int radioId, Stream segmentStream);
+        public Task UploadSegmentDataToFFMpeg(byte[] segmentData, CancellationToken cancellationToken);
     }
 }

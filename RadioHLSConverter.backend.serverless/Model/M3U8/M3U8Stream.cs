@@ -16,8 +16,8 @@ namespace RadioHLSConverter.backend.serverless.Model.M3U8
     public class M3U8Stream : ModelBase
     {
         // Regex to decode the stream infos.
-        private static Regex _regexBandwidth = new Regex("BANDWIDTH=([0-9]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace | RegexOptions.CultureInvariant);
-        private static Regex _regexCodecs = new Regex("CODECS=\"(.*)\"", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace | RegexOptions.CultureInvariant);
+        private static Regex _regexBandwidth = new Regex("BANDWIDTH=([0-9]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : BANDWIDTH=96000
+        private static Regex _regexCodecs = new Regex("CODECS=\"(.*)\"", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : CODECS="mp4a.40.2"
 
 
         // Properties.

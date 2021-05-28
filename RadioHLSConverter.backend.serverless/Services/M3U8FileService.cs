@@ -22,21 +22,20 @@ namespace RadioHLSConverter.backend.serverless.Services
     public class M3U8FileService : IM3U8FileService
     {
         // Regex.
-        private static Regex _regexIsM3U8 = new Regex("#EXTM3U", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-        private static Regex _regexVersion = new Regex("#EXT-X-VERSION:([0-9]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-        private static Regex _regexListStreams = new Regex("#EXT-X-STREAM-INF:(.*)\n((?!#).*)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-        private static Regex _regexListSegments = new Regex("#EXTINF:(.*),.*\n((?!#).*)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-        private static Regex _regexURL = new Regex("(https?:\\/\\/.+\\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        private static Regex _regexIsM3U8 = new Regex("#EXTM3U", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : #EXTM3U at the beginning of the M3U8 file.
+        private static Regex _regexVersion = new Regex("#EXT-X-VERSION:([0-9]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : #EXT-X-VERSION:[WITH A VERSION NUMBER]
+        private static Regex _regexListStreams = new Regex("#EXT-X-STREAM-INF:(.*)\n((?!#).*)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : #EXT-X-STREAM-INF:[Duration]
+        private static Regex _regexListSegments = new Regex("#EXTINF:(.*),.*\n((?!#).*)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);// Ex : #EXTINF:[INFO],[OTHER INFORMATIONS]\n[SEGMENT FILENAME]
+        private static Regex _regexURL = new Regex("(https?:\\/\\/.+\\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : http://url.com/path/test.m3u8 will give http://url.com/path/
 
         // Http client.
         private HttpClient _client = new HttpClient(new SocketsHttpHandler
         {
-            PooledConnectionLifetime = TimeSpan.MaxValue,
-            PooledConnectionIdleTimeout = TimeSpan.FromMinutes(5)
+            PooledConnectionLifetime = TimeSpan.MaxValue, // Set HTTP connection lifetime to unlimited.
+            PooledConnectionIdleTimeout = TimeSpan.FromMinutes(5) // Close HTTP connection after 5 minutes of idle.
         });
 
         // Properties.
-        private IFFMpegConverterService _ffMpegConverterService; // Allow audio conversion using FFMpeg software.
         public bool IsM3U8 => _regexIsM3U8.IsMatch(Data); // If the last downloaded m3u8 is valid.
         public int Version => _regexVersion.Match(Data).Success ? int.Parse(_regexVersion.Match(Data).Groups[1].Value) : 0; // The last m3u8 file version.
         public string Data { get; private set; } // The last m3u8 file data.
@@ -55,14 +54,14 @@ namespace RadioHLSConverter.backend.serverless.Services
         public IEnumerable<M3U8Segment> Segments { get; private set; } = new List<M3U8Segment>();
 
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        public M3U8FileService(IFFMpegConverterService ffMpegConverterService)
+        ///////////////////////////////////////////////////
+        // Destructor.
+        ///////////////////////////////////////////////////
+        public void Dispose()
         {
-            _ffMpegConverterService = ffMpegConverterService;
+            _client?.Dispose();
         }
-
+        
 
         #region Load M3U8 file
         /// <summary>
@@ -126,24 +125,6 @@ namespace RadioHLSConverter.backend.serverless.Services
         {
             // Download segment data.
             return await _client.GetByteArrayAsync(URLPath + segment.SegmentFilename, cancellationToken);
-        }
-
-
-        /// <summary>
-        /// Download an m3u8 segment and return the segment stream.
-        /// </summary>
-        /// <param name="radioId"></param>
-        /// <param name="segment"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public async Task<byte[]> DownloadConvertedSegment(int radioId, M3U8Segment segment, CancellationToken cancellationToken)
-        {
-            // Get segment stream.
-            await using (var segmentStream = await _client.GetStreamAsync(URLPath + segment.SegmentFilename, cancellationToken))
-            {
-                // Convert segment to the new format / codec.
-                return await _ffMpegConverterService.ConvertSegmentStream(radioId, segmentStream);
-            }
         }
         #endregion
 
