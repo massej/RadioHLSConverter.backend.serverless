@@ -47,8 +47,10 @@ namespace RadioHLSConverter.backend.serverless.Tests.Radio
 
 #if DEBUG
         [Fact] //  - too long to execute can only be run on debug.
-#endif
         public async Task ValidGetRadio()
+#else
+        private async Task ValidGetRadio()
+#endif
         {
             // Get response.
             var response = await APIHelper.FunctionHandlerAsync("./Controllers/Radio/SampleRequests/RadioController-Get-Radio.json");
@@ -62,8 +64,10 @@ namespace RadioHLSConverter.backend.serverless.Tests.Radio
 
 #if DEBUG
         [Fact] //  - too long to execute can only be run on debug.
-#endif
         public async Task ValidGetRadioID()
+#else
+        private async Task ValidGetRadioID()
+#endif
         {
             // Get response.
             var response = await APIHelper.FunctionHandlerAsync("./Controllers/Radio/SampleRequests/RadioController-Get-Radio-ID.json");
