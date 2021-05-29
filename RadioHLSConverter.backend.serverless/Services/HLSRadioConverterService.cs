@@ -117,6 +117,10 @@ namespace RadioHLSConverter.backend.serverless.Services
                 await _httpContextAccessor?.HttpContext?.Response?.Body?.WriteAsync(segmentData, offset, count, cancellationToken);
                 await _httpContextAccessor?.HttpContext?.Response?.Body?.FlushAsync(cancellationToken);
             }
+            // If the task is cancelled then ignore the error, the cancelled task is already caught into the RadioController.
+            catch (OperationCanceledException)
+            { }
+            // Log the exception.
             catch (Exception exception)
             {
                 _logger.LogInformation(exception.Message + Environment.NewLine + exception.StackTrace);

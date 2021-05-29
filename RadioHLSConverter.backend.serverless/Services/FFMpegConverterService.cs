@@ -8,7 +8,6 @@
 
 // Includes.
 using System;
-using System.ComponentModel;
 using Microsoft.Extensions.Options;
 using RadioHLSConverter.backend.serverless.Settings;
 using System.IO.Pipes;
@@ -85,29 +84,33 @@ namespace RadioHLSConverter.backend.serverless.Services
             _callbackFunction = callbackFunction;
             _cancellationToken = cancellationToken;
 
-            try
+            // This function must run in background!
+            // Must run on a separate task. (The await will block this task until the end.)
+            Task.Run(async () =>
             {
-                // Call ffmpeg utility and make the conversion.
-                // The output is going to a memory stream.
-                // This function must run in background!
-                // _ allow to ignore the compiler await warning.
-                _ = FFMpegArguments
-                    // Pipe to memory stream.
-                    .FromFileInput(_toFFMpegStream.GetPipeFullPath(_toFFMpegStreamName), false)
-                    // Output set format / audio codec.
-                    .OutputToFile(_fromFFMpegStream.GetPipeFullPath(_fromFFMpegStreamName), true, options => options
-                        .OverwriteExisting()
-                        .ForceFormat(_appSettings.Radios[radioId].FFMPEGForceFormat)
-                        .WithAudioCodec(_appSettings.Radios[radioId].FFMPEGConverterAudioCodec)
-                        .WithCustomArgument(_appSettings.Radios[radioId].FFMPEGCustomArgument))
-                    // Process async.
-                    .ProcessAsynchronously();
-            }
-            catch
-            {
-                _logger.LogInformation(Resources.Resource.error_throw_ffmpeg);
-                throw;
-            }
+                try
+                {
+                    // Call ffmpeg utility and make the conversion.
+                    // The output is going to a memory stream.
+                    await FFMpegArguments
+                        // Pipe to memory stream.
+                        .FromFileInput(_toFFMpegStream.GetPipeFullPath(_toFFMpegStreamName), false)
+                        // Output set format / audio codec.
+                        .OutputToFile(_fromFFMpegStream.GetPipeFullPath(_fromFFMpegStreamName), true, options => options
+                            .OverwriteExisting()
+                            .ForceFormat(_appSettings.Radios[radioId].FFMPEGForceFormat)
+                            .WithAudioCodec(_appSettings.Radios[radioId].FFMPEGConverterAudioCodec)
+                            .WithCustomArgument(_appSettings.Radios[radioId].FFMPEGCustomArgument))
+                        // Process async.
+                        .ProcessAsynchronously();
+                }
+                catch(Exception exception)
+                {
+                    // If the task is cancelled then ignore the error.
+                    if (!_cancellationToken.IsCancellationRequested)
+                        _logger.LogInformation(Resources.Resource.error_throw_ffmpeg + Environment.NewLine + exception.Message + Environment.NewLine + exception.StackTrace);
+                }
+            }, cancellationToken);
         }
 
 
@@ -143,6 +146,10 @@ namespace RadioHLSConverter.backend.serverless.Services
                 byte[] buffer = new byte[_appSettings.FFMpegPipeBufferInBytes];
                 _fromFFMpegStream.BeginRead(buffer, 0, buffer.Length, PipeStreamReadCallBack, buffer);
             }
+            // If the task is cancelled then ignore the error, the cancelled task is already caught into the RadioController.
+            catch (OperationCanceledException)
+            { }
+            // Log the exception.
             catch (Exception exception)
             {
                 _logger.LogInformation(exception.Message + Environment.NewLine + exception.StackTrace);
@@ -177,6 +184,10 @@ namespace RadioHLSConverter.backend.serverless.Services
                 else
                     Dispose();
             }
+            // If the task is cancelled then ignore the error, the cancelled task is already caught into the RadioController.
+            catch (OperationCanceledException)
+            { }
+            // Log the exception.
             catch (Exception exception)
             {
                 _logger.LogInformation(exception.Message + Environment.NewLine + exception.StackTrace);
