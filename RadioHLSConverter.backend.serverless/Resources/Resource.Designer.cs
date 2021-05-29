@@ -124,7 +124,7 @@ namespace RadioHLSConverter.backend.serverless.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Connected client, GetRadio - IP : {0} - Radio ID : {1} - Radio Name : {2}.
+        ///   Looks up a localized string similar to Connected client - GetRadio - IP : {0} - Radio ID : {1} - Radio Name : {2}.
         /// </summary>
         public static string radio_connected_client {
             get {
@@ -133,7 +133,7 @@ namespace RadioHLSConverter.backend.serverless.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Disconnected client - {0}, GetRadio - IP : {1} - Radio ID : {2} - Radio Name : {3}.
+        ///   Looks up a localized string similar to Disconnected client - GetRadio - IP : {0} - Radio ID : {1} - Radio Name : {2}.
         /// </summary>
         public static string radio_disconnected_client {
             get {

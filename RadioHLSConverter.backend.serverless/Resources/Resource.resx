@@ -139,10 +139,10 @@
     <value>Error, upload pipe to ffmpeg is not connected!</value>
   </data>
   <data name="radio_connected_client" xml:space="preserve">
-    <value>Connected client, GetRadio - IP : {0} - Radio ID : {1} - Radio Name : {2}</value>
+    <value>Connected client - GetRadio - IP : {0} - Radio ID : {1} - Radio Name : {2}</value>
   </data>
   <data name="radio_disconnected_client" xml:space="preserve">
-    <value>Disconnected client - {0}, GetRadio - IP : {1} - Radio ID : {2} - Radio Name : {3}</value>
+    <value>Disconnected client - GetRadio - IP : {0} - Radio ID : {1} - Radio Name : {2}</value>
   </data>
   <data name="startup_development_environment" xml:space="preserve">
     <value>In development environment - version {0}!</value>

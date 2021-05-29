@@ -88,13 +88,9 @@ namespace RadioHLSConverter.backend.serverless.Radio
             {
                 await _hlsRadioConverterService.ConvertHLSRadio(radioId, Response.HttpContext.RequestAborted);
             }
-            catch (TaskCanceledException)
-            {
-                _logger.LogInformation(String.Format(Resources.Resource.radio_disconnected_client, "TaskCanceledException", remoteIpAddress, radioId, _appSettings.Radios[radioId].RadioName));
-            }
             catch (OperationCanceledException)
             {
-                _logger.LogInformation(String.Format(Resources.Resource.radio_disconnected_client, "OperationCanceledException", remoteIpAddress, radioId, _appSettings.Radios[radioId].RadioName));
+                _logger.LogInformation(String.Format(Resources.Resource.radio_disconnected_client, remoteIpAddress, radioId, _appSettings.Radios[radioId].RadioName));
             }
             catch(Exception exception)
             {
