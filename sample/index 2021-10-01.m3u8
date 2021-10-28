@@ -1,0 +1,11 @@
+#EXTM3U
+#EXT-X-VERSION:7
+## Just In Time Delivered by Quortex Solution, version 2.8.0
+#EXT-X-INDEPENDENT-SEGMENTS
+
+#EXT-X-STREAM-INF:BANDWIDTH=64000,CODECS="mp4a.40.5"
+audio-64000/index.m3u8
+
+
+
+
