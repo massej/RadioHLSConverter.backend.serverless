@@ -11,8 +11,8 @@
 	"profile": "",
 	"region": "",
 	"configuration": "Release",
-	"framework": "netcoreapp3.0",
-	"s3-prefix": "RadioHLSConverter.backend.serverless/",
+	"framework": "netcoreapp3.1",
+	"s3-prefix": "serverless.app/",
 	"template": "serverless.template",
 	"template-parameters": "ShouldCreateBucket=true;BucketName="
 }

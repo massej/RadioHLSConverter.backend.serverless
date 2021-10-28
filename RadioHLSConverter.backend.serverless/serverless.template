@@ -27,12 +27,12 @@
 				"Type" : "AWS::Serverless::Function",
 				"Properties": {
 				"Handler": "RadioHLSConverter.backend.serverless::RadioHLSConverter.backend.serverless.LambdaEntryPoint::FunctionHandlerAsync",
-				"Runtime": "dotnetcore2.1",
+				"Runtime": "dotnetcore3.1",
 				"CodeUri": "",
-				"MemorySize": 256,
+				"MemorySize": 512,
 				"Timeout": 30,
 				"Role": null,
-				"Policies": [ "AWSLambdaFullAccess" ],
+				"Policies": null,
 				"Environment" : {
 					"Variables" : {
 						"AppS3Bucket" : { "Fn::If" : ["CreateS3Bucket", {"Ref":"Bucket"}, { "Ref" : "BucketName" } ] }
