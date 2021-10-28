@@ -32,7 +32,7 @@ This software will allow you to convert an HTTP Live Streaming (HLS) radio sourc
 
  *** You can also install this software as a service. (i.e. To have the application running in background.)
 
-- Windows : sc create RadioHLSConverter BinPath="[YOUR PATH]\RadioHLSConverter.backend.serverless.exe --urls=\"http:/127.0.0.1:5000\""
+- Windows : sc create RadioHLSConverter BinPath="[YOUR PATH]\RadioHLSConverter.backend.serverless.exe --urls=\"http://127.0.0.1:5000\""
 - Linux : This application support systemd. (See Linux manual "man" documentation https://man7.org/linux/man-pages/man1/systemd.1.html)
 
 5. Add audio source URL into your music software (i.e. Winamp)
