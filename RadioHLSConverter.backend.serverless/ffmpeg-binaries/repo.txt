@@ -1,0 +1,5 @@
+linux64 / win64
+https://github.com/BtbN/FFmpeg-Builds/releases
+
+arm64
+https://johnvansickle.com/ffmpeg/
