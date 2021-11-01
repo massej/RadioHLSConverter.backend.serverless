@@ -65,7 +65,7 @@ namespace RadioHLSConverter.backend.serverless.Services
         public async Task ConvertHLSRadio(int radioId, CancellationToken cancellationToken)
         {
             // Initialize ffmpeg converter pipe stream.
-            _ffMpegConverterService.Init_FFMpeg(radioId, UploadSegmentDataToHTTP, cancellationToken);
+            await _ffMpegConverterService.Init_FFMpeg(radioId, UploadSegmentDataToHTTP, cancellationToken);
 
             // Download m3u8 file. (It can be a m3u8 with a list of streams of a list of segments.)
             // It will automatically download the best quality segments list if this is a list of streams.

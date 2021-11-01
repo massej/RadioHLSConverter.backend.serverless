@@ -79,38 +79,67 @@ namespace RadioHLSConverter.backend.serverless.Services
         /// <param name="radioId"></param>
         /// <param name="callbackFunction"></param>
         /// <param name="cancellationToken"></param>
-        public void Init_FFMpeg(int radioId, Func<byte[], int, int, CancellationToken, Task> callbackFunction, CancellationToken cancellationToken)
+        public async Task Init_FFMpeg(int radioId, Func<byte[], int, int, CancellationToken, Task> callbackFunction, CancellationToken cancellationToken)
         {
             _callbackFunction = callbackFunction;
             _cancellationToken = cancellationToken;
 
             // This function must run in background!
             // Must run on a separate task. (The await will block this task until the end.)
-            Task.Run(async () =>
-            {
-                try
-                {
+            _ = Task.Run(async () =>
+              {
+                  try
+                  {
                     // Call ffmpeg utility and make the conversion.
                     // The output is going to a memory stream.
                     await FFMpegArguments
-                        // Pipe to memory stream.
-                        .FromFileInput(_toFFMpegStream.GetPipeFullPath(_toFFMpegStreamName), false)
-                        // Output set format / audio codec.
-                        .OutputToFile(_fromFFMpegStream.GetPipeFullPath(_fromFFMpegStreamName), true, options => options
-                            .OverwriteExisting()
-                            .ForceFormat(_appSettings.Radios[radioId].FFMPEGForceFormat)
-                            .WithAudioCodec(_appSettings.Radios[radioId].FFMPEGConverterAudioCodec)
-                            .WithCustomArgument(_appSettings.Radios[radioId].FFMPEGCustomArgument))
-                        // Process async.
-                        .ProcessAsynchronously();
-                }
-                catch(Exception exception)
-                {
+                          // Pipe to memory stream.
+                          .FromFileInput(_toFFMpegStream.GetPipeFullPath(_toFFMpegStreamName), false)
+                          // Output set format / audio codec.
+                          .OutputToFile(_fromFFMpegStream.GetPipeFullPath(_fromFFMpegStreamName), true, options => options
+                              .OverwriteExisting()
+                              .ForceFormat(_appSettings.Radios[radioId].FFMPEGForceFormat)
+                              .WithAudioCodec(_appSettings.Radios[radioId].FFMPEGConverterAudioCodec)
+                              .WithCustomArgument(_appSettings.Radios[radioId].FFMPEGCustomArgument))
+                          // Process async.
+                          .ProcessAsynchronously();
+                  }
+                  catch (Exception exception)
+                  {
                     // If the task is cancelled then ignore the error.
                     if (!_cancellationToken.IsCancellationRequested)
-                        _logger.LogInformation(Resources.Resource.error_throw_ffmpeg + Environment.NewLine + exception.Message + Environment.NewLine + exception.StackTrace);
+                          _logger.LogInformation(Resources.Resource.error_throw_ffmpeg + Environment.NewLine + exception.Message + Environment.NewLine + exception.StackTrace);
+                  }
+              }, cancellationToken);
+
+            // Wait pipe to be connected.
+            await WaitPipeToBeConnected(_toFFMpegStream, cancellationToken);
+        }
+
+
+        /// <summary>
+        /// WaitPipeToBeConnected
+        /// Wait ffmpeg pipe to be connected.
+        /// </summary>
+        /// <param name="pipeToBeConnected"></param>
+        /// <param name="cancellationToken"></param>
+        /// <param name="maxWaitTimeInSeconds"></param>
+        /// <returns></returns>
+        private async Task WaitPipeToBeConnected(PipeStream pipeToBeConnected, CancellationToken cancellationToken, int maxWaitTimeInSeconds = 5)
+        {
+            await Task.Run(() =>
+            {
+                maxWaitTimeInSeconds *= 10;
+                for (int i = 0; i < maxWaitTimeInSeconds; ++i)
+                {
+                    // If pipe is connected, stop waiting.
+                    if (pipeToBeConnected.IsConnected)
+                        return;
+
+                    // Wait 100 ms more.
+                    Task.Delay(100, cancellationToken).Wait(cancellationToken);
                 }
-            }, cancellationToken);
+            });
         }
 
 

@@ -26,7 +26,7 @@ namespace RadioHLSConverter.backend.serverless.Services
         /// <param name="radioId"></param>
         /// <param name="callbackFunction"></param>
         /// <param name="cancellationToken"></param>
-        public void Init_FFMpeg(int radioId, Func<byte[], int, int, CancellationToken, Task> callbackFunction,  CancellationToken cancellationToken);
+        public Task Init_FFMpeg(int radioId, Func<byte[], int, int, CancellationToken, Task> callbackFunction,  CancellationToken cancellationToken);
 
 
         /// <summary>
