@@ -31,6 +31,7 @@ namespace RadioHLSConverter.backend.serverless.Services
         private readonly NamedPipeServerStream _toFFMpegStream; // to ffmpeg pipe stream.
         private readonly string _fromFFMpegStreamName; // from ffmpeg pipe stream name.
         private readonly NamedPipeServerStream _fromFFMpegStream; // from ffmpeg pipe stream.
+        private readonly ManualResetEventSlim _toFFMpegStreamNewConnectionSignal = new ManualResetEventSlim(); // Signal when there is a new connection.
 
         // Callback function.
         private Func<byte[], int, int, CancellationToken, Task> _callbackFunction; // Callback fonction when receive data from the ffmpeg pipe stream.
@@ -54,8 +55,8 @@ namespace RadioHLSConverter.backend.serverless.Services
             _fromFFMpegStream = new NamedPipeServerStream(_fromFFMpegStreamName, PipeDirection.In, 1, PipeTransmissionMode.Byte, PipeOptions.WriteThrough, _appSettings.FFMpegPipeBufferInBytes, 0);
 
             // Open pipe stream for connection.
-            _toFFMpegStream.BeginWaitForConnection(null, _toFFMpegStream);
-            _fromFFMpegStream.BeginWaitForConnection(PipeStreamConnectCallBack, _fromFFMpegStream);
+            _toFFMpegStream.BeginWaitForConnection(ToFFMpegStreamPipeStreamConnectCallBack, _toFFMpegStream);
+            _fromFFMpegStream.BeginWaitForConnection(FromFFMpegStreamPipeStreamConnectCallBack, _fromFFMpegStream);
         }
 
 
@@ -113,7 +114,7 @@ namespace RadioHLSConverter.backend.serverless.Services
               }, cancellationToken);
 
             // Wait pipe to be connected.
-            await WaitPipeToBeConnected(_toFFMpegStream, cancellationToken);
+            await WaitPipeToBeConnected(_toFFMpegStreamNewConnectionSignal, cancellationToken);
         }
 
 
@@ -121,24 +122,14 @@ namespace RadioHLSConverter.backend.serverless.Services
         /// WaitPipeToBeConnected
         /// Wait ffmpeg pipe to be connected.
         /// </summary>
-        /// <param name="pipeToBeConnected"></param>
+        /// <param name="signal"></param>
         /// <param name="cancellationToken"></param>
-        /// <param name="maxWaitTimeInSeconds"></param>
         /// <returns></returns>
-        private async Task WaitPipeToBeConnected(PipeStream pipeToBeConnected, CancellationToken cancellationToken, int maxWaitTimeInSeconds = 5)
+        private async Task WaitPipeToBeConnected(ManualResetEventSlim signal, CancellationToken cancellationToken)
         {
             await Task.Run(() =>
             {
-                maxWaitTimeInSeconds *= 10;
-                for (int i = 0; i < maxWaitTimeInSeconds; ++i)
-                {
-                    // If pipe is connected, stop waiting.
-                    if (pipeToBeConnected.IsConnected)
-                        return;
-
-                    // Wait 100 ms more.
-                    Task.Delay(100, cancellationToken).Wait(cancellationToken);
-                }
+                signal.Wait(TimeSpan.FromSeconds(30), cancellationToken);
             });
         }
 
@@ -161,11 +152,22 @@ namespace RadioHLSConverter.backend.serverless.Services
 
 
         /// <summary>
-        /// PipeStreamConnectCallBack
+        /// ToFFMpegStreamPipeStreamConnectCallBack
         /// Called when pipe stream receive a connection (i.e. ffmpeg app try to connect)
         /// </summary>
         /// <param name="result"></param>
-        private void PipeStreamConnectCallBack(IAsyncResult result)
+        private void ToFFMpegStreamPipeStreamConnectCallBack(IAsyncResult result)
+        {
+            _toFFMpegStreamNewConnectionSignal.Set();
+        }
+
+
+        /// <summary>
+        /// FromFFMpegStreamPipeStreamConnectCallBack
+        /// Called when pipe stream receive a connection (i.e. ffmpeg app try to connect)
+        /// </summary>
+        /// <param name="result"></param>
+        private void FromFFMpegStreamPipeStreamConnectCallBack(IAsyncResult result)
         {
             try
             {
