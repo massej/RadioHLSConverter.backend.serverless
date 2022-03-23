@@ -9,7 +9,8 @@ This software will allow you to convert an HTTP Live Streaming (HLS) radio sourc
 
 2. Download the lastest binary version from https://github.com/massej/RadioHLSConverter.backend.serverless/tree/main/release-binaries/
 
-3. appsettings.json configuration
+3. appsettings.json configuration Host
+ - "ForceHTTPS" Force to use encrypted HTTPS traffic. (HTTP will be redirected to HTTPS and enable HSTS - Strict-Transport-Security HTTP header.)
  - "AllowedHosts" Host or IP that is allowed to connect to HTTP server. ("*" is any hosts.)
  - "FFMpegPipeBufferInBytes" stream pipe buffer in bytes between the application and ffmpeg.
  - "BufferSizeInSeconds" buffer size in seconds between the application and the HLS server.
