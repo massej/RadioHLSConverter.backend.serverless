@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Localization;
@@ -54,11 +53,19 @@ namespace RadioHLSConverter.backend.serverless
             ////////////////////////////////////////
             /// Add MVC & versioning.
             ////////////////////////////////////////
-            services.AddMvc(options =>
+            services.AddControllers(options =>
                 {
                     options.EnableEndpointRouting = false;
-                }) // Add MVC.
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0); // NET Core version.
+                }); // Add Controllers.
+
+            // Configure HSTS
+            // https://docs.microsoft.com/en-us/aspnet/core/security/enforcing-ssl?WT.mc_id=DT-MVP-5003978#http-strict-transport-security-protocol-hsts
+            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
+            services.AddHsts(options =>
+            {
+                options.IncludeSubDomains = true;
+                options.MaxAge = TimeSpan.FromDays(365);
+            });
 
             ////////////////////////////////////////
             // Configure strongly typed settings objects
@@ -145,6 +152,19 @@ namespace RadioHLSConverter.backend.serverless
             {
                 logger.LogInformation(string.Format(Resources.Resource.startup_production_environment, GetType().Assembly.GetName().Version));
                 app.UseHsts();
+
+                // Security Headers, see https://securityheaders.com/
+                /* Disabled because it's an API, only HSTS is important.
+                app.Use(async (context, next) =>
+                {
+                    context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
+                    context.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
+                    context.Response.Headers.Add("Referrer-Policy", "strict-origin-when-cross-origin");
+                    context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+                    await next();
+                });
+                */
+
             }
 
 
