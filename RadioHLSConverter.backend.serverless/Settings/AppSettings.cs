@@ -14,6 +14,7 @@ namespace RadioHLSConverter.backend.serverless.Settings
     public class AppSettings
     {
         // Variables.
+        public bool ForceHTTPS { get; set; }
         public int FFMpegPipeBufferInBytes { get; set; }
         public int BufferSizeInSeconds { get; set; }
         public RadioSettings[] Radios { get; set; }

@@ -33,7 +33,7 @@ namespace RadioHLSConverter.backend.serverless
     {
         // Configuration.
         public static IConfiguration Configuration { get; private set; }
-
+        private static AppSettings AppSettings { get; set; }
 
         /// <summary>
         /// Constructor.
@@ -74,8 +74,8 @@ namespace RadioHLSConverter.backend.serverless
             services.Configure<AppSettings>(appSettingsSection);
 
             // Init app settings objects.
-            var appSettings = new AppSettings();
-            appSettingsSection.Bind(appSettings);
+            AppSettings = new AppSettings();
+            appSettingsSection.Bind(AppSettings);
 
 
             ////////////////////////////////////////
@@ -151,7 +151,6 @@ namespace RadioHLSConverter.backend.serverless
             else
             {
                 logger.LogInformation(string.Format(Resources.Resource.startup_production_environment, GetType().Assembly.GetName().Version));
-                app.UseHsts();
 
                 // Security Headers, see https://securityheaders.com/
                 /* Disabled because it's an API, only HSTS is important.
@@ -165,6 +164,12 @@ namespace RadioHLSConverter.backend.serverless
                 });
                 */
 
+                // Force to use HTTPS.
+                if (AppSettings.ForceHTTPS)
+                {
+                    app.UseHttpsRedirection()   // Redirect HTTP to HTTPS.
+                        .UseHsts();             // Enable HSTS - Strict-Transport-Security header.
+                }
             }
 
 
