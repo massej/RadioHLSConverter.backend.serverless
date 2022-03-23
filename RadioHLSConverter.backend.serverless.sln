@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RadioHLSConverter.backend.serverless", "RadioHLSConverter.backend.serverless\RadioHLSConverter.backend.serverless.csproj", "{756ED5A5-2F3C-4F75-B522-56DCF675E3C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RadioHLSConverter.backend.serverless.Tests", "RadioHLSConverter.backend.serverless.Tests\RadioHLSConverter.backend.serverless.Tests.csproj", "{0843B670-C8B3-4ECC-91DE-6D805BB6A8BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RadioHLSConverter.backend.serverless.Tests", "RadioHLSConverter.backend.serverless.Tests\RadioHLSConverter.backend.serverless.Tests.csproj", "{0843B670-C8B3-4ECC-91DE-6D805BB6A8BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
