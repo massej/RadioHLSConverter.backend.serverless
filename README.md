@@ -3,7 +3,7 @@
 This software will allow you to convert an HTTP Live Streaming (HLS) radio source (m3u8 file extension) to the old HTTP streaming format.
 - Ex : Convert "MPEG-TS" to "ADTS" audio format while keeping the same audio codec "AAC" from the HLS radio to allow Winamp to play and read the stream.
 
-1. Install C# NET Core 5.0 https://dotnet.microsoft.com/download/dotnet/5.0
+1. Install C# NET Core 6.0 https://dotnet.microsoft.com/download/dotnet/6.0
 
 	- On Linux you may need to install ffmpeg manually using yum or apt-get.
 
