@@ -61,7 +61,18 @@
 			"Type" : "AWS::S3::Bucket",
 			"Condition" : "CreateS3Bucket",
 			"Properties" : {
-				"BucketName" : { "Fn::If" : ["BucketNameGenerated", {"Ref" : "AWS::NoValue" }, { "Ref" : "BucketName" } ] }
+				"BucketName" : { "Fn::If" : ["BucketNameGenerated", {"Ref" : "AWS::NoValue" }, { "Ref" : "BucketName" } ] },
+				"BucketEncryption": {
+                    "ServerSideEncryptionConfiguration": [
+                        {
+                            "ServerSideEncryptionByDefault": {
+                                "SSEAlgorithm": "AES256"
+                            }
+                        }
+                    ]
+                },
+				"AccessControl" : "Private",
+				"PublicAccessBlockConfiguration" : { "BlockPublicAcls" : "true", "BlockPublicPolicy" : "true", "IgnorePublicAcls" : "true", "RestrictPublicBuckets" : "true" }
 			}
 		}
 	},
