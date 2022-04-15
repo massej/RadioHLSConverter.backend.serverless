@@ -16,7 +16,7 @@ namespace RadioHLSConverter.backend.serverless
 {
 
     /// <summary>
-    /// This class extends from APIGatewayProxyFunction which contains the method FunctionHandlerAsync which is the 
+    /// This class extends from APIGatewayHttpApiV2ProxyFunction which contains the method FunctionHandlerAsync which is the 
     /// actual Lambda function entry point. The Lambda handler field should be set to
     /// 
     /// ICare.backend::ICare.backend.LambdaEntryPoint::FunctionHandlerAsync
@@ -34,7 +34,7 @@ namespace RadioHLSConverter.backend.serverless
         // Note: When using the AWS::Serverless::Function resource with an event type of "HttpApi" then payload version 2.0
         // will be the default and you must make Amazon.Lambda.AspNetCoreServer.APIGatewayHttpApiV2ProxyFunction the base class.
 
-        Amazon.Lambda.AspNetCoreServer.APIGatewayProxyFunction
+        Amazon.Lambda.AspNetCoreServer.APIGatewayHttpApiV2ProxyFunction
     {
         /// <summary>
         /// The builder has configuration, logging and Amazon API Gateway already configured. The startup class

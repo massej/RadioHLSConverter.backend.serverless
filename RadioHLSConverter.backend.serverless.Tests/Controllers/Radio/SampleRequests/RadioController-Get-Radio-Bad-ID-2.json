@@ -1,6 +1,10 @@
 ﻿{
-  "path": "/api/Radio/29192",
-  "httpMethod": "GET",
+  "requestcontext": {
+    "http": {
+      "path": "/api/Radio/29192",
+      "method": "GET"
+    }
+  },
   "headers": {
     "Accept": "application/json",
     "Accept-Language": "en",

@@ -40,14 +40,14 @@
 				},
 				"Events": {
 					"ProxyResource": {
-						"Type": "Api",
+						"Type": "HttpApi",
 						"Properties": {
 							"Path": "/{proxy+}",
 							"Method": "ANY"
 						}
 					},
 					"RootResource": {
-						"Type": "Api",
+						"Type": "HttpApi",
 						"Properties": {
 							"Path": "/",
 							"Method": "ANY"
@@ -80,7 +80,7 @@
 	"Outputs" : {
 		"ApiURL" : {
 			"Description" : "API endpoint URL for Prod environment",
-			"Value" : { "Fn::Sub" : "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/" }
+			"Value" : { "Fn::Sub" : "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/" }
 		},
 		"S3ProxyBucket" : {
 			"Value" : { "Fn::If" : ["CreateS3Bucket", {"Ref":"Bucket"}, { "Ref" : "BucketName" } ] }
