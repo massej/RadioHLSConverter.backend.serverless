@@ -160,7 +160,7 @@ namespace RadioHLSConverter.backend.serverless.Services
             while (Segments.Any() && nextSegment == null)
             {
                 // Wait at least the delay of a segment.
-                await Task.Delay(Convert.ToInt32(segment.Length * 1000), cancellationToken);
+                await Task.Delay(Convert.ToInt32(Segments.Min(x => x.Length) * 1000), cancellationToken); // Some radio station has smaller segment. (In this case we need to have to be lower than the current segment length.)
 
                 // Update the m3u8 file to get newer segment.
                 await LoadCurrentM3U8File(cancellationToken);
