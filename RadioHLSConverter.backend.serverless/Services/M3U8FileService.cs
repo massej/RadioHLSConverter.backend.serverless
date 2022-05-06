@@ -137,7 +137,13 @@ namespace RadioHLSConverter.backend.serverless.Services
         public M3U8Segment GetFirstSegment(decimal bufferSize = 30m)
         {
             decimal bufferSizeInSeconds = 0m;
-            return Segments.Reverse().SkipWhile(x => (bufferSizeInSeconds += x.Length) < bufferSize).FirstOrDefault();
+            var firstSegment = Segments.Reverse().SkipWhile(x => (bufferSizeInSeconds += x.Length) < bufferSize).FirstOrDefault();
+
+            // If buffer size is too big. i.e. (If available radio m3u8 segments is less than the application buffer then use the first segment.)
+            if (firstSegment == null)
+                firstSegment = Segments.First();
+
+            return firstSegment;
         }
 
         /// <summary>
@@ -160,7 +166,7 @@ namespace RadioHLSConverter.backend.serverless.Services
             while (Segments.Any() && nextSegment == null)
             {
                 // Wait at least the delay of a segment.
-                await Task.Delay(Convert.ToInt32(segment.Length * 1000), cancellationToken);
+                await Task.Delay(Convert.ToInt32(segment.Length * 500), cancellationToken); // Some radio station has smaller segment. (In this case we need to have to be lower than the current segment length.)
 
                 // Update the m3u8 file to get newer segment.
                 await LoadCurrentM3U8File(cancellationToken);
@@ -181,7 +187,8 @@ namespace RadioHLSConverter.backend.serverless.Services
         /// <returns></returns>
         public M3U8Segment GetNextSegment(M3U8Segment segment)
         {
-            return Segments.SkipWhile(x => x.SegmentFilename != segment.SegmentFilename).Skip(1).FirstOrDefault();
+            // If we can use segment number.
+            return Segments.SkipWhile(x => x.SegmentNumber <= segment.SegmentNumber).FirstOrDefault();
         }
         #endregion
 
