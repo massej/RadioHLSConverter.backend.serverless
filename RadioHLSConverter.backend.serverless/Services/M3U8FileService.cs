@@ -137,7 +137,13 @@ namespace RadioHLSConverter.backend.serverless.Services
         public M3U8Segment GetFirstSegment(decimal bufferSize = 30m)
         {
             decimal bufferSizeInSeconds = 0m;
-            return Segments.Reverse().SkipWhile(x => (bufferSizeInSeconds += x.Length) < bufferSize).FirstOrDefault();
+            var firstSegment = Segments.Reverse().SkipWhile(x => (bufferSizeInSeconds += x.Length) < bufferSize).FirstOrDefault();
+
+            // If buffer size is too big. i.e. (If available radio m3u8 segments is less than the application buffer then use the first segment.)
+            if (firstSegment == null)
+                firstSegment = Segments.First();
+
+            return firstSegment;
         }
 
         /// <summary>
@@ -181,7 +187,8 @@ namespace RadioHLSConverter.backend.serverless.Services
         /// <returns></returns>
         public M3U8Segment GetNextSegment(M3U8Segment segment)
         {
-            return Segments.SkipWhile(x => x.SegmentFilename != segment.SegmentFilename).Skip(1).FirstOrDefault();
+            // If we can use segment number.
+            return Segments.SkipWhile(x => x.SegmentNumber <= segment.SegmentNumber).FirstOrDefault();
         }
         #endregion
 

@@ -70,12 +70,12 @@ namespace RadioHLSConverter.backend.serverless.Services
             // Download m3u8 file. (It can be a m3u8 with a list of streams of a list of segments.)
             // It will automatically download the best quality segments list if this is a list of streams.
             await _m3u8FileService.LoadM3U8File(_appSettings.Radios[radioId].RadioSourceURL, cancellationToken);
-            
+
             // Download / Get next segment.
             var segment = _m3u8FileService.GetFirstSegment(_appSettings.BufferSizeInSeconds);
 
             // If there is no first segment.
-            if(segment == null)
+            if (segment == null)
                 throw new Exception(Resources.Resource.error_no_first_segment_check_buffer);
 
             ///////////////////////////
