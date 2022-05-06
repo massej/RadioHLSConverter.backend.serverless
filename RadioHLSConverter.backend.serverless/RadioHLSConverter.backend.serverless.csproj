@@ -7,9 +7,9 @@
     <Authors>Jonathan Massé</Authors>
     <Company></Company>
     <AssemblyOriginatorKeyFile>sign.snk</AssemblyOriginatorKeyFile>
-    <Version>1.0.8</Version>
-    <AssemblyVersion>1.0.8.0</AssemblyVersion>
-    <FileVersion>1.0.8.0</FileVersion>
+    <Version>1.0.9</Version>
+    <AssemblyVersion>1.0.9.0</AssemblyVersion>
+    <FileVersion>1.0.9.0</FileVersion>
     <Copyright></Copyright>
   </PropertyGroup>
 
@@ -25,11 +25,11 @@
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer" Version="7.1.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.2" />
-    <PackageReference Include="FFMpegCore" Version="4.7.0" />
+    <PackageReference Include="FFMpegCore" Version="4.8.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.0" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
   </ItemGroup>
 
   <ItemGroup>
