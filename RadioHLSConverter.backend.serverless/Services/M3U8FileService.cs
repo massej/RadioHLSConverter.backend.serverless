@@ -15,6 +15,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
 using RadioHLSConverter.backend.serverless.Model.M3U8;
+using System.Globalization;
 
 
 namespace RadioHLSConverter.backend.serverless.Services
@@ -37,7 +38,7 @@ namespace RadioHLSConverter.backend.serverless.Services
 
         // Properties.
         public bool IsM3U8 => _regexIsM3U8.IsMatch(Data); // If the last downloaded m3u8 is valid.
-        public int Version => _regexVersion.Match(Data).Success ? int.Parse(_regexVersion.Match(Data).Groups[1].Value) : 0; // The last m3u8 file version.
+        public int Version => _regexVersion.Match(Data).Success ? int.Parse(_regexVersion.Match(Data).Groups[1].Value, NumberStyles.Number, CultureInfo.InvariantCulture) : 0; // The last m3u8 file version.
         public string Data { get; private set; } // The last m3u8 file data.
         public string URL { get; private set; } // The last m3u8 file full URL.
         public string URLPath { get; private set; } // The last m3u8 file URL path (without the filename).

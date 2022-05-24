@@ -7,6 +7,7 @@
 
 
 // Includes.
+using System.Globalization;
 using System.Text.RegularExpressions;
 using RadioHLSConverter.backend.serverless.Helpers;
 
@@ -37,7 +38,7 @@ namespace RadioHLSConverter.backend.serverless.Model.M3U8
             var matchCodecs = _regexCodecs.Match(match.Groups[1].Value);
 
             // Load properties.
-            Bandwidth = matchBandwidth.Success ? int.Parse(matchBandwidth.Groups[1].Value) : 0;
+            Bandwidth = matchBandwidth.Success ? int.Parse(matchBandwidth.Groups[1].Value, NumberStyles.Number, CultureInfo.InvariantCulture) : 0;
             Codecs = matchCodecs.Success ? matchCodecs.Groups[1].Value : "";
             StreamFilename = match.Groups[2].Value;
         }

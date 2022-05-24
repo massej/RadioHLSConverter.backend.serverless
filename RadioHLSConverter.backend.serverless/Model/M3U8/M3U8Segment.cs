@@ -7,6 +7,7 @@
 
 
 // Includes.
+using System.Globalization;
 using System.Text.RegularExpressions;
 using RadioHLSConverter.backend.serverless.Helpers;
 
@@ -32,7 +33,7 @@ namespace RadioHLSConverter.backend.serverless.Model.M3U8
                     string value = _regexSegmentNumber.Match(SegmentFilename).Groups[1].Value;
 
                     // If segment number can be converted to int.
-                    if (int.TryParse(value, out segmentNumber))
+                    if (int.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out segmentNumber))
                         return segmentNumber;
                 }
 
@@ -48,7 +49,7 @@ namespace RadioHLSConverter.backend.serverless.Model.M3U8
         public M3U8Segment(Match match)
         {
             // Load properties.
-            Length = decimal.Parse(match.Groups[1].Value);
+            Length = decimal.Parse(match.Groups[1].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
             SegmentFilename = match.Groups[2].Value;
         }
     }
