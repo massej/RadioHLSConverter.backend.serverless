@@ -7,9 +7,9 @@
     <Authors>Jonathan Massé</Authors>
     <Company></Company>
     <AssemblyOriginatorKeyFile>sign.snk</AssemblyOriginatorKeyFile>
-    <Version>1.0.9</Version>
-    <AssemblyVersion>1.0.9.0</AssemblyVersion>
-    <FileVersion>1.0.9.0</FileVersion>
+    <Version>1.0.10</Version>
+    <AssemblyVersion>1.0.10.0</AssemblyVersion>
+    <FileVersion>1.0.10.0</FileVersion>
     <Copyright></Copyright>
   </PropertyGroup>
 
@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Amazon.Lambda.AspNetCoreServer" Version="7.1.0" />
+    <PackageReference Include="Amazon.Lambda.AspNetCoreServer" Version="7.2.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.2" />
     <PackageReference Include="FFMpegCore" Version="4.8.0" />
