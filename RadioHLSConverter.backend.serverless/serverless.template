@@ -28,6 +28,7 @@
 				"Properties": {
 				"Handler": "RadioHLSConverter.backend.serverless::RadioHLSConverter.backend.serverless.LambdaEntryPoint::FunctionHandlerAsync",
 				"Runtime": "dotnet6",
+				"Architectures": ["arm64"],
 				"CodeUri": "",
 				"MemorySize": 512,
 				"Timeout": 30,
