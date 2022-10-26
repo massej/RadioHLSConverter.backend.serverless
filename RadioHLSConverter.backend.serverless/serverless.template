@@ -75,6 +75,16 @@
 				"AccessControl" : "Private",
 				"PublicAccessBlockConfiguration" : { "BlockPublicAcls" : "true", "BlockPublicPolicy" : "true", "IgnorePublicAcls" : "true", "RestrictPublicBuckets" : "true" }
 			}
+		},
+
+		"ApiUsagePlan": {
+			"Type": "AWS::ApiGateway::UsagePlan",
+			"Properties": {
+				"Throttle": {
+					"RateLimit": 25,
+					"BurstLimit": 2
+				}
+			}
 		}
 	},
 
