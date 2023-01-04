@@ -48,11 +48,11 @@ namespace RadioHLSConverter.backend.serverless.Services
 
             // Prepare to ffmpeg pipe stream.
             _toFFMpegStreamName = Guid.NewGuid().ToString();
-            _toFFMpegStream = new NamedPipeServerStream(_toFFMpegStreamName, PipeDirection.Out, 1, PipeTransmissionMode.Byte, PipeOptions.WriteThrough, 0, _appSettings.FFMpegPipeBufferInBytes);
+            _toFFMpegStream = new NamedPipeServerStream(_toFFMpegStreamName, PipeDirection.Out, 1, PipeTransmissionMode.Byte, PipeOptions.WriteThrough | PipeOptions.Asynchronous, 0, _appSettings.FFMpegPipeBufferInBytes);
 
             // Prepare from ffmpeg pipe stream.
             _fromFFMpegStreamName = Guid.NewGuid().ToString();
-            _fromFFMpegStream = new NamedPipeServerStream(_fromFFMpegStreamName, PipeDirection.In, 1, PipeTransmissionMode.Byte, PipeOptions.WriteThrough, _appSettings.FFMpegPipeBufferInBytes, 0);
+            _fromFFMpegStream = new NamedPipeServerStream(_fromFFMpegStreamName, PipeDirection.In, 1, PipeTransmissionMode.Byte, PipeOptions.WriteThrough | PipeOptions.Asynchronous, _appSettings.FFMpegPipeBufferInBytes, 0);
 
             // Open pipe stream for connection.
             _toFFMpegStream.BeginWaitForConnection(ToFFMpegStreamPipeStreamConnectCallBack, _toFFMpegStream);
@@ -148,6 +148,7 @@ namespace RadioHLSConverter.backend.serverless.Services
                 throw new Exception(Resources.Resource.error_upload_pipe_not_connected);
 
             await _toFFMpegStream.WriteAsync(segmentData, 0, segmentData.Length, cancellationToken);
+            await _toFFMpegStream.FlushAsync(cancellationToken);
         }
 
 
