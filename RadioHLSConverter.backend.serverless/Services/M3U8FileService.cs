@@ -16,12 +16,15 @@ using System.Collections.Generic;
 using System.Threading;
 using RadioHLSConverter.backend.serverless.Model.M3U8;
 using System.Globalization;
-
+using RadioHLSConverter.backend.serverless.Helpers;
 
 namespace RadioHLSConverter.backend.serverless.Services
 {
     public class M3U8FileService : IM3U8FileService
     {
+        // Constants.
+        private const int MAXIMUM_SEGMENTS_IN_LIST = 30;
+
         // Regex.
         private static Regex _regexIsM3U8 = new Regex("#EXTM3U", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : #EXTM3U at the beginning of the M3U8 file.
         private static Regex _regexVersion = new Regex("#EXT-X-VERSION:([0-9]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : #EXT-X-VERSION:[WITH A VERSION NUMBER]
@@ -47,12 +50,12 @@ namespace RadioHLSConverter.backend.serverless.Services
         /// <summary>
         /// M3U8 list of streams.
         /// </summary>
-        public IEnumerable<M3U8Stream> Streams { get; private set; } = new List<M3U8Stream>();
+        public IList<M3U8Stream> Streams { get; private set; } = new List<M3U8Stream>();
 
         /// <summary>
         /// M3U8 list of segments.
         /// </summary>
-        public IEnumerable<M3U8Segment> Segments { get; private set; } = new List<M3U8Segment>();
+        public IList<M3U8Segment> Segments { get; private set; } = new List<M3U8Segment>();
 
 
         ///////////////////////////////////////////////////
@@ -208,8 +211,12 @@ namespace RadioHLSConverter.backend.serverless.Services
             if(!Streams.Any() && !Segments.Any())
                 Streams = _regexListStreams.Matches(Data).Select(x => new M3U8Stream(x)).ToList();
 
-            // Update list of segments.
-            Segments = _regexListSegments.Matches(Data).Select(x => new M3U8Segment(x)).ToList();
+            // Update list of segments. (Take only the last 30 (MAXIMUM_SEGMENTS_IN_LIST) segments to avoid having issues with radio that send too many segments.)
+            Segments.Clear();
+            Segments.AddRange(_regexListSegments.Matches(Data).TakeLast(MAXIMUM_SEGMENTS_IN_LIST).Select(x => new M3U8Segment(x)));
+            
+            // Call garbage collector. (Force the garbage collector here, otherwise the process can take too much memory.)
+            GC.Collect();
 
             // If we have a list of streams and no segments, we need to select and download the best streaming available.
             if (Streams.Any() && !Segments.Any())

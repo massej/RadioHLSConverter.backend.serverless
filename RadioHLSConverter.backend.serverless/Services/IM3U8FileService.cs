@@ -29,12 +29,12 @@ namespace RadioHLSConverter.backend.serverless.Services
         /// <summary>
         /// M3U8 list of streams.
         /// </summary>
-        public IEnumerable<M3U8Stream> Streams { get; }
+        public IList<M3U8Stream> Streams { get; }
 
         /// <summary>
         /// M3U8 list of segments.
         /// </summary>
-        public IEnumerable<M3U8Segment> Segments { get; }
+        public IList<M3U8Segment> Segments { get; }
 
         #region Load M3U8 file
         /// <summary>
