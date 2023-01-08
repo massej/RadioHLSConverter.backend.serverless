@@ -91,13 +91,18 @@ namespace RadioHLSConverter.backend.serverless.Radio
                 await _hlsRadioConverterService.ConvertHLSRadio(radioId, Response.HttpContext.RequestAborted);
             }
             catch (OperationCanceledException)
-            {
-                _logger.LogInformation(string.Format(Resources.Resource.radio_disconnected_client, remoteIpAddress, radioId, _appSettings.Radios[radioId].RadioName));
-            }
+            {}
             catch(Exception exception)
             {
                 _logger.LogInformation(exception.Message + Environment.NewLine + exception.StackTrace);
             }
+            finally
+            {
+                _hlsRadioConverterService.Dispose();
+            }
+
+            _logger.LogInformation(string.Format(Resources.Resource.radio_disconnected_client, remoteIpAddress, radioId, _appSettings.Radios[radioId].RadioName));
+
 
             // On debug and running as unit test stop there.
 #if DEBUG

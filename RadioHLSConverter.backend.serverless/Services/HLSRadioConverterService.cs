@@ -106,7 +106,6 @@ namespace RadioHLSConverter.backend.serverless.Services
         /// UploadSegmentDataToHTTP
         /// Upload a segment data to the HTTP client.
         /// </summary>
-        /// <param name="httpResponse"></param>
         /// <param name="segmentData"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
