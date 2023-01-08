@@ -14,7 +14,7 @@ using RadioHLSConverter.backend.serverless.Settings;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using RadioHLSConverter.backend.serverless.Helpers;
+using Microsoft.AspNetCore.Http.Features;
 
 
 namespace RadioHLSConverter.backend.serverless.Services
@@ -58,7 +58,6 @@ namespace RadioHLSConverter.backend.serverless.Services
         /// ConvertHLSRadio
         /// Convert an HLS radio to HTTP audio stream.
         /// </summary>
-        /// <param name="httpResponse"></param>
         /// <param name="radioId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
@@ -114,8 +113,9 @@ namespace RadioHLSConverter.backend.serverless.Services
         {
             try
             {
-                await _httpContextAccessor?.HttpContext?.Response?.Body?.WriteAsync(segmentData, offset, count, cancellationToken);
-                await _httpContextAccessor?.HttpContext?.Response?.Body?.FlushAsync(cancellationToken);
+                var responseBufferingFeature = _httpContextAccessor?.HttpContext?.Features.Get<IHttpResponseBodyFeature>();
+                await responseBufferingFeature?.Stream?.WriteAsync(segmentData, offset, count, cancellationToken);
+                await responseBufferingFeature?.Stream?.FlushAsync(cancellationToken);
             }
             // If the task is cancelled then ignore the error, the cancelled task is already caught into the RadioController.
             catch (OperationCanceledException)

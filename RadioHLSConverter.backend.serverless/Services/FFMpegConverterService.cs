@@ -209,10 +209,7 @@ namespace RadioHLSConverter.backend.serverless.Services
 
                 // If pipe is still open.
                 if (_fromFFMpegStream != null && _fromFFMpegStream.IsConnected)
-                {
-                    buffer = new byte[_appSettings.FFMpegPipeBufferInBytes];
                     _fromFFMpegStream.BeginRead(buffer, 0, buffer.Length, PipeStreamReadCallBack, buffer);
-                }
                 else
                     Dispose();
             }

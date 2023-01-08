@@ -23,7 +23,6 @@ namespace RadioHLSConverter.backend.serverless.Services
         /// ConvertHLSRadio
         /// Convert an HLS radio to HTTP audio stream.
         /// </summary>
-        /// <param name="httpResponse"></param>
         /// <param name="radioId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>

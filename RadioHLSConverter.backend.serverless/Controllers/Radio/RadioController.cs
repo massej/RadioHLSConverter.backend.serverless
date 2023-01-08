@@ -15,6 +15,8 @@ using Microsoft.Extensions.Options;
 using RadioHLSConverter.backend.serverless.Services;
 using System;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http.Features;
+using System.Threading;
 
 
 namespace RadioHLSConverter.backend.serverless.Radio
@@ -68,7 +70,7 @@ namespace RadioHLSConverter.backend.serverless.Radio
 
             // Logs incoming connection.
             string remoteIpAddress = Request?.HttpContext?.Connection?.RemoteIpAddress?.ToString();
-            _logger.LogInformation(String.Format(Resources.Resource.radio_connected_client, remoteIpAddress, radioId, _appSettings.Radios[radioId].RadioName));
+            _logger.LogInformation(string.Format(Resources.Resource.radio_connected_client, remoteIpAddress, radioId, _appSettings.Radios[radioId].RadioName));
 
 
             /////////////////////////////////
@@ -82,15 +84,15 @@ namespace RadioHLSConverter.backend.serverless.Radio
             Response.Headers.Add("icy-name", _appSettings.Radios[radioId].RadioName);
             Response.Headers.Add("icy-description", _appSettings.Radios[radioId].RadioDescription);
 
-
             // Execute the HLS radio conversion.
             try
             {
+                await HttpContext.Response.StartAsync(Response.HttpContext.RequestAborted);
                 await _hlsRadioConverterService.ConvertHLSRadio(radioId, Response.HttpContext.RequestAborted);
             }
             catch (OperationCanceledException)
             {
-                _logger.LogInformation(String.Format(Resources.Resource.radio_disconnected_client, remoteIpAddress, radioId, _appSettings.Radios[radioId].RadioName));
+                _logger.LogInformation(string.Format(Resources.Resource.radio_disconnected_client, remoteIpAddress, radioId, _appSettings.Radios[radioId].RadioName));
             }
             catch(Exception exception)
             {
