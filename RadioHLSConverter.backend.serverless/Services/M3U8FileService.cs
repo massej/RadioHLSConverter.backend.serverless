@@ -30,7 +30,8 @@ namespace RadioHLSConverter.backend.serverless.Services
         private static Regex _regexVersion = new Regex("#EXT-X-VERSION:([0-9]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : #EXT-X-VERSION:[WITH A VERSION NUMBER]
         private static Regex _regexListStreams = new Regex("#EXT-X-STREAM-INF:(.*)\n((?!#).*)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : #EXT-X-STREAM-INF:[Duration]
         private static Regex _regexListSegments = new Regex("#EXTINF:(.*),.*\n((?!#).*)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);// Ex : #EXTINF:[INFO],[OTHER INFORMATIONS]\n[SEGMENT FILENAME]
-        private static Regex _regexURL = new Regex("(https?:\\/\\/.+\\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : http://url.com/path/test.m3u8 will give http://url.com/path/
+        private static Regex _regexURLPath = new Regex("(https?:\\/\\/.+\\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : http://url.com/path/test.m3u8 will give http://url.com/path/
+        private static Regex _regexIsAbsolutePath = new Regex("(https?:\\/\\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Regex that tell if there is an http:// or https:// in a string.
 
         // Http client.
         private HttpClient _client = new HttpClient(new SocketsHttpHandler
@@ -78,7 +79,7 @@ namespace RadioHLSConverter.backend.serverless.Services
         public async Task LoadM3U8File(string url, CancellationToken cancellationToken)
         {
             URL = url;
-            URLPath = _regexURL.Match(url).Groups[1].Value;
+            URLPath = _regexURLPath.Match(url).Groups[1].Value;
             await LoadCurrentM3U8File(cancellationToken);
         }
 
@@ -114,7 +115,8 @@ namespace RadioHLSConverter.backend.serverless.Services
         /// <returns></returns>
         public async Task LoadStreamFile(M3U8Stream stream, CancellationToken cancellationToken)
         {
-            await LoadM3U8File(URLPath + stream.StreamFilename, cancellationToken);
+            string fileURL = _regexIsAbsolutePath.IsMatch(stream.StreamFilename) ? stream.StreamFilename : URLPath + stream.StreamFilename;
+            await LoadM3U8File(fileURL, cancellationToken);
         }
         #endregion
 
