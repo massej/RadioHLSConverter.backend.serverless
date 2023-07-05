@@ -7,9 +7,9 @@
     <Authors>Jonathan Massé</Authors>
     <Company></Company>
     <AssemblyOriginatorKeyFile>sign.snk</AssemblyOriginatorKeyFile>
-    <Version>1.0.16</Version>
-    <AssemblyVersion>1.0.16.0</AssemblyVersion>
-    <FileVersion>1.0.16.0</FileVersion>
+    <Version>1.0.17</Version>
+    <AssemblyVersion>1.0.17.0</AssemblyVersion>
+    <FileVersion>1.0.17.0</FileVersion>
     <Copyright></Copyright>
   </PropertyGroup>
 

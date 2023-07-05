@@ -130,7 +130,8 @@ namespace RadioHLSConverter.backend.serverless.Services
         public async Task<byte[]> DownloadSegment(M3U8Segment segment, CancellationToken cancellationToken)
         {
             // Download segment data.
-            return await _client.GetByteArrayAsync(URLPath + segment.SegmentFilename, cancellationToken);
+            string fileURL = _regexIsAbsolutePath.IsMatch(segment.SegmentFilename) ? segment.SegmentFilename : URLPath + segment.SegmentFilename;
+            return await _client.GetByteArrayAsync(fileURL, cancellationToken);
         }
         #endregion
 
