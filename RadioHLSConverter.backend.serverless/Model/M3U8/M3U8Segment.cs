@@ -16,31 +16,9 @@ namespace RadioHLSConverter.backend.serverless.Model.M3U8
 {
     public class M3U8Segment : ModelBase
     {
-        // Regex.
-        private static Regex _regexSegmentNumber = new Regex("([0-9]+)\\.", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // segment_3351399.ts
-
         // Properties.
         public decimal Length { get; private set; } // Segment length in seconds.
         public string SegmentFilename { get; private set; } // Segment filename.
-        public int SegmentNumber  // Segment number.
-        {
-            get
-            {
-                // If a segment number is found.
-                if (_regexSegmentNumber.IsMatch(SegmentFilename))
-                {
-                    int segmentNumber;
-                    string value = _regexSegmentNumber.Match(SegmentFilename).Groups[1].Value;
-
-                    // If segment number can be converted to int.
-                    if (int.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out segmentNumber))
-                        return segmentNumber;
-                }
-
-                // No segment number found.
-                return -1;
-            }
-        }
 
         /// <summary>
         /// Constructor.
