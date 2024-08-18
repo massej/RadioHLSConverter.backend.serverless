@@ -28,7 +28,7 @@ namespace RadioHLSConverter.backend.serverless.Services
         // Regex.
         private static Regex _regexIsM3U8 = new Regex("#EXTM3U", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : #EXTM3U at the beginning of the M3U8 file.
         private static Regex _regexVersion = new Regex("#EXT-X-VERSION:([0-9]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : #EXT-X-VERSION:[WITH A VERSION NUMBER]
-        private static Regex _regexDiscontinuity = new Regex("#EXT-X-DISCONTINUITY\n", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : #EXT-X-DISCONTINUITY:
+        private static Regex _regexDiscontinuity = new Regex("#EXT-X-DISCONTINUITY\n", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : #EXT-X-DISCONTINUITY on message of the day (MOTD).
         private static Regex _regexListStreams = new Regex("#EXT-X-STREAM-INF:(.*)\n((?!#).*)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : #EXT-X-STREAM-INF:[Duration]
         private static Regex _regexListSegments = new Regex("#EXTINF:(.*),.*\n((?!#).*)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);// Ex : #EXTINF:[INFO],[OTHER INFORMATIONS]\n[SEGMENT FILENAME]
         private static Regex _regexURLPath = new Regex("(https?:\\/\\/.+\\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : http://url.com/path/test.m3u8 will give http://url.com/path/
