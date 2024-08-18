@@ -147,7 +147,7 @@ namespace RadioHLSConverter.backend.serverless.Services
             // If there is a discontinuity then we must start at the beginning, otherwise ffmpeg can give an error.
             // Also message of the day (MOTD) on radio use this tag.
             if (_regexDiscontinuity.Matches(Data).Count()>0)
-                return Segments.Last();
+                return Segments.First();
 
             decimal bufferSizeInSeconds = 0m;
             var firstSegment = Segments.Reverse().SkipWhile(x => (bufferSizeInSeconds += x.Length) < bufferSize).FirstOrDefault();
