@@ -81,17 +81,26 @@ namespace RadioHLSConverter.backend.serverless.Services
             ///////////////////////////
             // Uploading new segments.
             ///////////////////////////
-            while (true)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 // Download segment.
                 var segmentData = await _m3u8FileService.DownloadSegment(segment, cancellationToken);
+
+                // ThrowIfCancellationRequested.
+                cancellationToken.ThrowIfCancellationRequested();
 
                 // Upload segment to ffmpeg pipe stream.
                 // ffmpeg output pipe stream will automatically call back UploadSegmentDataToHTTP with the converted segment.
                 await _ffMpegConverterService.UploadSegmentDataToFFMpeg(segmentData, cancellationToken);
 
+                // ThrowIfCancellationRequested.
+                cancellationToken.ThrowIfCancellationRequested();
+
                 // Get next segment.
                 segment = await _m3u8FileService.GetNextSegmentAndUpdateM3U8(segment, cancellationToken);
+
+                // ThrowIfCancellationRequested.
+                cancellationToken.ThrowIfCancellationRequested();
 
                 // On debug and running as unit test stop there.
 #if DEBUG
@@ -113,8 +122,19 @@ namespace RadioHLSConverter.backend.serverless.Services
         {
             try
             {
+                // Get context.
                 var responseBufferingFeature = _httpContextAccessor?.HttpContext?.Features.Get<IHttpResponseBodyFeature>();
+
+                // ThrowIfCancellationRequested.
+                cancellationToken.ThrowIfCancellationRequested();
+
+                // Write buffer.
                 await responseBufferingFeature?.Stream?.WriteAsync(segmentData, offset, count, cancellationToken);
+
+                // ThrowIfCancellationRequested.
+                cancellationToken.ThrowIfCancellationRequested();
+
+                // Flush.
                 await responseBufferingFeature?.Stream?.FlushAsync(cancellationToken);
             }
             // If the task is cancelled then ignore the error, the cancelled task is already caught into the RadioController.
