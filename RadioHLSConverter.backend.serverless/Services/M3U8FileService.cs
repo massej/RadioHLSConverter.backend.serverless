@@ -30,7 +30,7 @@ namespace RadioHLSConverter.backend.serverless.Services
         private static Regex _regexVersion = new Regex("#EXT-X-VERSION:([0-9]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : #EXT-X-VERSION:[WITH A VERSION NUMBER]
         private static Regex _regexDiscontinuity = new Regex("#EXT-X-DISCONTINUITY\n", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : #EXT-X-DISCONTINUITY on message of the day (MOTD).
         private static Regex _regexListStreams = new Regex("#EXT-X-STREAM-INF:(.*)\n((?!#).*)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : #EXT-X-STREAM-INF:[Duration]
-        private static Regex _regexListSegments = new Regex("#EXTINF:(.*),.*\n((?!#).*)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);// Ex : #EXTINF:[INFO],[OTHER INFORMATIONS]\n[SEGMENT FILENAME]
+        private static Regex _regexListSegments = new Regex("#EXTINF:([\\d.]+),.*\n((?!#).*)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);// Ex : #EXTINF:[INFO],[OTHER INFORMATIONS]\n[SEGMENT FILENAME]
         private static Regex _regexURLPath = new Regex("(https?:\\/\\/.+\\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Ex : http://url.com/path/test.m3u8 will give http://url.com/path/
         private static Regex _regexIsAbsolutePath = new Regex("(https?:\\/\\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); // Regex that tell if there is an http:// or https:// in a string.
 
@@ -227,7 +227,7 @@ namespace RadioHLSConverter.backend.serverless.Services
 
             // Update list of segments. (Take only the last 30 (MAXIMUM_SEGMENTS_IN_LIST) segments to avoid having issues with radio that send too many segments.)
             Segments.Clear();
-            Segments.AddRange(_regexListSegments.Matches(Data).TakeLast(MAXIMUM_SEGMENTS_IN_LIST).Select(x => new M3U8Segment(x)));
+            Segments.AddRange(_regexListSegments.Matches(Data).TakeLast(MAXIMUM_SEGMENTS_IN_LIST).Select(x => new M3U8Segment(x)).Distinct()); // Distinct remove any element in double otherwise it can cause a loop.
             
             // Call garbage collector. (Force the garbage collector here, otherwise the process can take too much memory.)
             GC.Collect();
