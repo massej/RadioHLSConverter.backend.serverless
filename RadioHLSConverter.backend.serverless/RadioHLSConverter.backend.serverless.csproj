@@ -29,7 +29,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
   </ItemGroup>
 
   <ItemGroup>
