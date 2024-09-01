@@ -32,18 +32,22 @@ namespace RadioHLSConverter.backend.serverless.Model.M3U8
             SegmentFilename = match.Groups[2].Value;
         }
 
-        // Overriding GetHashCode method to match the Equals method
+        public bool Equals(M3U8Segment other)
+        {
+            if (other == null)
+                return false;
+
+            return SegmentFilename == other.SegmentFilename;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as M3U8Segment);
+        }
+
         public override int GetHashCode()
         {
             return SegmentFilename.GetHashCode();
-        }
-
-        // Implementing Equals method for comparison
-        public bool Equals(M3U8Segment other)
-        {
-            if (other == null) return false;
-
-            return SegmentFilename == other.SegmentFilename;
         }
     }
 }
