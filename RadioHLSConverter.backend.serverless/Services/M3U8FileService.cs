@@ -38,7 +38,8 @@ namespace RadioHLSConverter.backend.serverless.Services
         private HttpClient _client = new HttpClient(new SocketsHttpHandler
         {
             PooledConnectionLifetime = TimeSpan.MaxValue, // Set HTTP connection lifetime to unlimited.
-            PooledConnectionIdleTimeout = TimeSpan.FromMinutes(5) // Close HTTP connection after 5 minutes of idle.
+            PooledConnectionIdleTimeout = TimeSpan.FromMinutes(5), // Close HTTP connection after 5 minutes of idle.
+            ActivityHeadersPropagator = System.Diagnostics.DistributedContextPropagator.CreateNoOutputPropagator() // Disable distributed tracing for the whole HttpClient.
         });
 
         // Properties.
