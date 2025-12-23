@@ -21,7 +21,6 @@ using RadioHLSConverter.backend.serverless.Settings;
 using RadioHLSConverter.backend.serverless.Services;
 using FFMpegCore;
 using Microsoft.AspNetCore.Http;
-using Microsoft.OpenApi.Models;
 
 
 namespace RadioHLSConverter.backend.serverless

@@ -27,7 +27,7 @@
 				"Type" : "AWS::Serverless::Function",
 				"Properties": {
 				"Handler": "RadioHLSConverter.backend.serverless::RadioHLSConverter.backend.serverless.LambdaEntryPoint::FunctionHandlerAsync",
-				"Runtime": "dotnet6",
+				"Runtime": "dotnet10",
 				"Architectures": ["arm64"],
 				"CodeUri": "",
 				"MemorySize": 512,
